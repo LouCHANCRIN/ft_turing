@@ -2,7 +2,7 @@ import sys
 import json
 
 def check_state(machine: object, current_state: str):
-    if current_state == 'HALT':
+    if current_state in machine['finals']:
         sys.exit()
     if current_state not in machine['states']:
         sys.exit(f"Sate {current_state} doesn't exist in machine states ({machine['states']})")
@@ -22,8 +22,6 @@ def perform_transition(machine: object, tape: list, head: int, current_state: st
 def engine(machine: object, current_state: str, tape: list, head: int):
     if tape[head] not in machine['alphabet']:
         sys.exit(f"Value {tape[head]} is not in the alphabet")
-    # if tape[head] == machine['blank']:
-    #     sys.exit(f"Blank character ({tape[head]}) can't be on the tape")
     check_state(machine, current_state)
     perform_transition(machine, tape, head, current_state, list(filter(lambda transition: transition['read'] == tape[head], machine['transitions'][current_state])))
 
